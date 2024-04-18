@@ -7,12 +7,13 @@ public static class LibFunctions
     //public delegate float Function(float pos, float z, float time, float periodicity, float amplitude);
     public delegate Vector3 Function(float u, float v, float time);
 
-    public enum FunctionName {Wave, MultiWave, Ripple, Sphere};
+    public enum FunctionName {Wave, MultiWave, Ripple, Sphere, Torus};
     static Function[] functions ={
                                     Wave,
                                     MultiWave,
                                     Ripple,
-                                    Sphere
+                                    Sphere,
+                                    Torus
                                     };
 
     public static Function Func(FunctionName name)
@@ -77,6 +78,22 @@ public static class LibFunctions
         p.z = s * Cos(PI * u);
         
         return p;
+    }
+
+    public static Vector3 Torus(float u, float v, float time)
+    {
+        Vector3 p;
+
+        float major_r = 0.7f + 0.1f * Sin(PI * (6 * u + 0.5f + time));
+        float minor_r = 0.15f + 0.05f * Sin(PI * (8 * u + 4 * v + 2 * time));
+        float s = major_r + minor_r * Cos(PI * v);
+
+        p.x = s * Sin(PI * u);
+        p.y = minor_r * Sin(PI * v);
+        p.z = s * Cos(PI * u);
+
+        return p;
+
     }
 
     ////Single sine wave function
