@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class Graph : MonoBehaviour
 {
@@ -21,22 +22,31 @@ public class Graph : MonoBehaviour
                                                                     // of prefab 
         Vector3 scale = Vector3.one * step, pos = Vector3.zero;
 
-        for (int i = 0, x = 0, z = 0; i < points.Length; i++, x++)
+        for (int i = 0; i < points.Length; i++)
         {
-            if (x == resolution)
-            {
-                x = 0;
-                z++;
-            }
-            point = points[i] = Instantiate(prefabPoint);           // Creating prefab and getting its position
-            point.SetParent(transform);                             // Setting its parent to 'this' GameObject
-
-            pos.x = (x + 0.5f) * step - 1f;                         // Setting x position
-            pos.z = (z + 0.5f) * step - 1f;                         // Setting z position
-
-            point.localPosition = pos;                              // Setting prefab's position
-            point.localScale = scale;                               // Setting prefab's scale
+            point = points[i] = Instantiate(prefabPoint);
+        
+            point.localScale = scale;
+            point.SetParent(transform, false);
         }
+
+
+        //for (int i = 0, x = 0, z = 0; i < points.Length; i++, x++)
+        //{
+        //    if (x == resolution)
+        //    {
+        //        x = 0;
+        //        z++;
+        //    }
+        //    point = points[i] = Instantiate(prefabPoint);           // Creating prefab and getting its position
+        //    point.SetParent(transform);                             // Setting its parent to 'this' GameObject
+
+        //    pos.x = (x + 0.5f) * step - 1f;                         // Setting x position
+        //    pos.z = (z + 0.5f) * step - 1f;                         // Setting z position
+
+        //    point.localPosition = pos;                              // Setting prefab's position
+        //    point.localScale = scale;                               // Setting prefab's scale
+        //}
     }
     // Update is called once per frame
     void Update()
@@ -48,13 +58,28 @@ public class Graph : MonoBehaviour
     private void ChangeGraph(LibFunctions.Function f)
     {
         float t = Time.time;                                        // Storing the time at the beginning of the frame when rendered
-        for (int i = 0; i < points.Length; i++)                     // Changing all the x positions of points
-        {
-            Transform point = points[i];
 
-            Vector3 pos = point.localPosition;                      // Getting the local position of the point
-            pos.y = f(pos.x, pos.z, t, periodicity, amplitude);            // Changing the y position of the point
-            point.localPosition = pos;                              // Changing the overall position of the point
+        float step = 2f / resolution;
+        
+        float v = 0.5f * step - 1f;                                 // Setting z position
+        for (int i = 0,x = 0, z = 0; i < points.Length; i++, x++)   // Changing all the x positions of points
+        {
+            if(x == resolution)
+            {
+                x = 0;
+                z++;
+                v = (z + 0.5f) * step - 1f;                         // Setting z position
+
+            }
+
+            //Transform point = points[i];
+
+            //Vector3 pos = point.localPosition;                      // Getting the local position of the point
+            //pos.y = f(pos.x, pos.z, t);                             // Changing the y position of the point
+
+            float u = (x + 0.5f) * step - 1f;                         // Setting x position
+
+            points[i].localPosition = f(u, v, t);                     // Changing the overall position of the point
         }
     }
 }
