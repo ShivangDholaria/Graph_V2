@@ -408,10 +408,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabPoint: {fileID: 7902791165853534280, guid: 2cc977d423e137342b3386e2cf2ef889, type: 3}
-  resolution: 100
   amplitude: 0.47
   periodicity: 0
-  func: 5
+  FuncName: 0
 --- !u!4 &1649207609
 Transform:
   m_ObjectHideFlags: 0
